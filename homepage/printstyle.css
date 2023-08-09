@@ -1,0 +1,1393 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+p {
+  display: none;
+}
+.firstPage{
+  display: none;
+}
+
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.img1,
+.img2 {
+  width: auto;
+  height: auto;
+  max-width: 70%;
+  max-height: 70%;
+}
+
+.printimg {
+  page-break-after: always;
+}
+
+body {
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.printbutton {
+  background-color: #29299B;
+  color: #f1f1f1;
+  width: 200px;
+  height: 60px;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  margin-right: 10px;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+
+.printbutton .printicon {
+  width: 16px;
+  height: 16px;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.printbutton:hover {
+  background-color: #46469C;
+}
+
+.printbutton:focus {
+  outline: none;
+}
+
+.printbutton:active {
+  background-color: #272757;
+}
+
+.userimage {
+  display: none;
+}
+
+  @media print {
+
+    @page{  
+      size: 8in 13in;
+    }
+
+    .firstPage{
+      display: block;
+    }
+    .page {
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative; 
+    }
+    
+    .img1{
+      max-width: 89%;
+      max-height: 89%;
+    }
+    .img2{
+      max-width: 90%;
+      max-height: 90%;
+    }
+    
+    .userimage {
+      position: absolute;
+      top: 15.1%;
+      right: 10.3%;
+      display: block;
+    }
+    
+    .uploaded-image {
+      width: 115px;
+      height: 115px;
+      max-width: 115px;
+    }
+    
+    .printimg {
+      page-break-after: always;
+    }
+    
+    body {
+      background-color: white;
+      margin: 0;
+      padding: 0;
+    }
+  
+    p {
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 10px;
+      color: black;
+      transform: translate(-50%, -50%);
+      position: absolute; 
+      text-transform: uppercase;
+    }
+  
+    button {
+      display: none;
+    }
+  
+    .referenceCode {
+      top: 19.6%;
+      left: 44.5%;
+      font-weight: bold;
+    }
+    .lastName {
+      top: 22.2%;
+      left: 27.2%;
+    }
+  
+    .firstName {
+      top: 22.2%;
+      left: 42.4%;
+    }
+  
+    .middleName {
+      top: 22.2%;
+      left: 56.8%;
+    }
+    .extensionName {
+        top: 22.2%;
+        left: 70%;
+      }
+      .region {
+        top: 25%;
+        left: 27%;
+        font-size:8px;
+       
+      }
+      .province {
+        top: 24.8%;
+        left: 42.4%;
+      }
+      .city {
+        top: 24.8%;
+        left: 56.8%;
+      }
+      .barangay {
+        top: 24.8%;
+        left: 73%;
+      }
+      .houseno {
+        top: 27%;
+        left: 41.3%;
+      }
+      .street {
+        top: 27%;
+        left: 73%;
+      }
+      .birthDate {
+        top: 29.6%;
+        left: 28%;
+        font-size: 13px;
+        letter-spacing: 14px;
+      }
+      .birthPlace {
+        top: 30%;
+        left: 56.8%;
+      }
+      .maritalStatus {
+        top: 30%;
+        left: 83%;
+      }
+      .gender {
+        top: 32.5%;
+        left: 27.2%;
+      }
+      .contactNumber {
+        top: 32.5%;
+        left: 56.8%;
+      }
+      .email {
+        top: 32.5%;
+        left: 83%;
+        font-size: 9px;
+        text-transform: none;
+      }
+      .religion {
+        top: 34.5%;
+        left: 27.2%;
+      }
+      .ethnic {
+        top: 34.5%;
+        left: 56.8%;
+      }
+      .language {
+        top: 34.5%;
+        left: 83%;
+      }
+      .oscaID {
+        top: 37.1%;
+        left: 27.2%;
+      }
+      .sss {
+        top: 37.1%;
+        left: 56.8%;
+      }
+      .tin {
+        top: 37.1%;
+        left: 83%;
+      }
+      .philhealth {
+        top: 39.8%;
+        left: 27.2%;
+      }
+      .orgID {
+        top: 39.8%;
+        left: 56.8%;
+      }
+      .govID {
+        top: 39.8%;
+        left: 83%;
+      }
+      .travelYes {
+        position: fixed;
+        top: 43.4%;
+        left: 21.2%;
+        font-size: 13px;
+        transform: translate(-50%, -50%);
+      }
+      .travelNo {
+        position: fixed;
+        top: 43.4%;
+        left: 28.4%;
+        font-size: 13px;
+        transform: translate(-50%, -50%);
+      }
+      .serviceEmp {
+        top: 42.5%;
+        left: 56.8%;
+      }
+      .pension {
+        top: 42.5%;
+        left: 83%;
+      }
+      .spouseLastName {
+        top: 46.8%;
+        left: 27.2%;
+      }
+      .spouseFirstName {
+        top: 46.8%;
+        left: 49.5%;
+      }
+      .spouseMiddleName {
+        top: 46.8%;
+        left: 73%;
+      }
+      .spouseExtensionName {
+        top: 46.8%;
+        left: 86.5%;
+      }
+      .fatherLastName {
+        top: 49.3%;
+        left: 27.2%;
+      }
+      .fatherFirstName {
+        top: 49.3%;
+        left: 49.5%;
+      }
+      .fatherMiddleName {
+        top: 49.3%;
+        left: 73%;
+      }
+      .fatherExtensionName {
+        top: 49.3%;
+        left: 86.5%;
+      }
+      .motherLastName {
+        top: 51.9%;
+        left: 27.2%;
+      }
+      .motherFirstName {
+        top: 51.9%;
+        left: 49.5%;
+      }
+      .motherMiddleName {
+        top: 51.9%;
+        left: 77%;
+      }
+      .child1FullName {
+        top: 56.5%;
+        left: 34%;
+      }
+      .child1Occupation {
+        top: 56.5%;
+        left: 56.8%;
+      }
+      .child1Income {
+        top: 56.5%;
+        left: 69.5%;
+      }
+      .child1Age {
+        top: 56.5%;
+        left: 78.5%;
+      }
+      .child1Work {
+        top: 56.7%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .child2FullName {
+        top: 57.8%;
+        left: 34%;
+      }
+      .child2Occupation {
+        top: 57.8%;
+        left: 56.8%;
+      }
+      .child2Income {
+        top: 57.8%;
+        left: 69.5%;
+      }
+      .child2Age {
+        top: 57.8%;
+        left: 78.5%;
+       }
+      .child2Work {
+        top: 58%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .child3FullName {
+        top: 59.1%;
+        left: 34%;
+      }
+      .child3Occupation {
+        top: 59.1%;
+        left: 56.8%;
+      }
+      .child3Income {
+        top: 59.1%;
+        left: 69.5%;
+      }
+      .child3Age {
+        top: 59.1%;
+        left: 78.5%;
+      }
+      .child3Work {
+        top: 59.3%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .child4FullName {
+        top: 60.3%;
+        left: 34%;
+      }
+      .child4Occupation {
+        top: 60.3%;
+        left: 56.8%;
+      }
+      .child4Income {
+        top: 60.3%;
+        left: 69.5%;
+      }
+      .child4Age {
+        top: 60.3%;
+        left: 78.5%;
+      }
+      .child4Work {
+        top: 60.5%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .dependentFullName {
+        top: 61.6%;
+        left: 34%;
+      }
+      .dependentOccupation {
+        top: 61.6%;
+        left: 56.8%;
+      }
+      .dependentIncome {
+        top: 61.6%;
+        left: 69.5%;
+      }
+      .dependentAge {
+        top: 61.6%;
+        left: 78.5%;
+      }
+      .dependentWork {
+        top: 61.8%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .dependent2FullName {
+        top: 62.9%;
+        left: 34%;
+      }
+      .dependent2Occupation {
+        top: 62.9%;
+        left: 56.8%;
+      }
+      .dependent2Income {
+        top: 62.9%;
+        left: 69.5%;
+      }
+      .dependent2Age {
+        top: 62.9%;
+        left: 78.5%;
+      }
+      .dependent2Work {
+        top: 63.1%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .dependent3FullName {
+        top: 64.3%;
+        left: 34%;
+      }
+      .dependent3Occupation {
+        top: 64.3%;
+        left: 56.8%;
+      }
+      .dependent3Income {
+        top: 64.3%;
+        left: 69.5%;
+      }
+      .dependent3Age {
+        top: 64.3%;
+        left: 78.5%;
+      }
+      .dependent3Work {
+        top: 64.5%;
+        left: 86.4%;
+        font-size: 8px;
+      }
+      .elemLevel {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.6%;
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .elemGrad {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.5%;
+        left: 23.8%;
+        font-size: 13px;
+      }
+      .highSchoolLevel {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.6%;
+        left: 36.9%;
+        font-size: 13px;
+      }
+      .highSchoolGrad {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 69%;
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .collegeLevel {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 68.8%;
+        left: 23.8%;
+        font-size: 13px;
+      }
+      .collegeGrad {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 68.9%;
+        left: 36.9%;
+        font-size: 13px;
+      }
+      .postGrad {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.3%;
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .vocational {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.3%;
+        left: 23.8%;
+        font-size: 13px;
+      }
+      .notAttendedSchool {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.3%;
+        left: 36.8%;
+        font-size: 13px;
+      }
+      .specializationMedical {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.5%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationTeaching {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.5%;
+        left: 65.5%;
+        font-size: 13px;
+      }
+      .specializationLegal {
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 67.5%;
+        left: 76.6%;
+        font-size: 13px;
+      }
+      .specializationDental{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 68.9%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationCounseling{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 68.9%;
+        left: 65.5%;
+        font-size: 13px;
+      }
+      .specializationFarming{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 68.9%;
+        left: 76.6%;
+        font-size: 13px;
+      }
+      .specializationFishing{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.4%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationCooking{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.4%;
+        left: 65.5%;
+        font-size: 13px;
+      }
+      .specializationArts{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 70.4%;
+        left: 76.7%;
+        font-size: 13px;
+      }
+      .specializationEngineering{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 71.5%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationCarpenter{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 71.5%;
+        left: 65.5%;
+        font-size: 13px;
+      }
+      .specializationPlumber{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 71.5%;
+        left: 76.7%;
+        font-size: 13px;
+      }
+      .specializationBarber{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 72.7%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationMason{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 72.7%;
+        left: 65.4%;
+        font-size: 13px;
+      }
+      .specializationSapatero{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 72.7%;
+        left: 76.6%;
+        font-size: 13px;
+      }
+      .specializationEvangelization{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 74%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationTailor{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 74%;
+        left: 65.4%;
+        font-size: 13px;
+      }
+      .specializationChef{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 74%;
+        left: 76.6%;
+        font-size: 13px;
+      }
+      .specializationMilwright{
+        transform: translate(-50%, -50%);
+        position: fixed;
+        top: 75.5%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .specializationOthers{
+        top: 76%;
+        left: 82%;
+        font-weight: bold;
+      }
+      .shareSkill{
+        top: 73.2%;
+        left: 30%;
+      }
+      .shareSkill1{
+        top: 74.6%;
+        left: 30%;
+      }
+      .shareSkill2{
+        top: 76%;
+        left: 30%;
+      }
+      .communityServiceMedical{
+        transform: translate(-50%, -50%);
+        top: 78.5%; 
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .communityServiceResource{
+        transform: translate(-50%, -50%);
+        top: 78.5%; 
+        left: 36.8%;
+        font-size: 13px;
+      }
+      .communityServiceBea{
+        transform: translate(-50%, -50%);
+        top: 78.5%; 
+        left: 65.4%;
+        font-size: 13px;
+      }
+      .communityServiceOrg{
+        transform: translate(-50%, -50%);
+        top: 80%; 
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .communityServiceDental{
+        transform: translate(-50%, -50%);
+        top: 80%; 
+        left: 36.8%;
+        font-size: 13px;
+      }
+      .communityServiceFri{
+        transform: translate(-50%, -50%);
+        top: 80%; 
+        left: 65.4%;
+        font-size: 13px;
+      }
+      .communityServiceNeigh{
+        transform: translate(-50%, -50%);
+        top: 81.3%;
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .communityServiceLegal{
+        transform: translate(-50%, -50%);
+        top: 81.3%;
+        left: 36.8%;
+        font-size: 13px;
+      }
+      .communityServiceRel{
+        transform: translate(-50%, -50%);
+        top: 81.3%;
+        left: 65.4%;
+        font-size: 13px;
+      }
+      .communityServiceCoun{
+        transform: translate(-50%, -50%);
+        top: 82.6%;
+        left: 11.2%;
+        font-size: 13px;
+      }
+      .communityServiceSpo{
+        transform: translate(-50%, -50%);
+        top: 82.7%;
+        left: 36.9%;
+        font-size: 13px;
+      }
+      .communityServiceOthers{
+        top: 83%;
+        left: 82%;
+        font-weight: bold;
+      }
+
+
+
+/* SECOND PAGE */
+
+
+
+      .residingwithAlone {
+        transform: translate(-50%, -50%);
+        top: 6.5%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .residingwithGrand {
+        transform: translate(-50%, -50%);
+        top: 6.5%;
+        left: 24.7%;
+        font-size: 13px;
+      }
+      .residingwithCom {
+        transform: translate(-50%, -50%);
+        top: 6.5%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .residingwithSpouse {
+        transform: translate(-50%, -50%);
+        top: 7.5%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .residingwithInLaw {
+        transform: translate(-50%, -50%);
+        top: 7.4%;
+        left: 24.8%;
+        font-size: 13px;
+      }
+      .residingwithCare {
+        transform: translate(-50%, -50%);
+        top: 7.5%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .residingwithChild {
+        transform: translate(-50%, -50%);
+        top: 8.4%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .residingwithRel {
+        transform: translate(-50%, -50%);
+        top: 8.4%;
+        left: 24.8%;
+        font-size: 13px;
+      }
+      .residingwithFri {
+        transform: translate(-50%, -50%);
+        top: 8.4%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .residingWithOthers {
+        top: 9.7%;
+        left: 34%;
+        font-weight: bold;
+      }
+      .houseHoldNoPrivacy {
+        transform: translate(-50%, -50%);
+        top: 6.5%;
+        left: 51.7%;
+        font-size: 13px;
+      }
+      .houseHoldOver {
+        transform: translate(-50%, -50%);
+        top: 6.5%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .houseHoldInf {
+        transform: translate(-50%, -50%);
+        top: 7.4%;
+        left: 51.7%;
+        font-size: 13px;
+      }
+      .houseHoldNoPer {
+        transform: translate(-50%, -50%);
+        top: 7.4%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .houseHoldHigh {
+        transform: translate(-50%, -50%);
+        top: 8.4%;
+        left: 51.7%;
+        font-size: 13px;
+      }
+      .houseHoldLonging {
+        transform: translate(-50%, -50%);
+        top: 8.4%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .houseHoldOthers {
+        top: 9.7%;
+        left: 72%;
+        font-weight: bold;
+      }
+
+      .sourceIncomeOwn {
+        transform: translate(-50%, -50%);
+        top: 13.3%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeOwnPen {
+        transform: translate(-50%, -50%);
+        top: 13.3%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeStocks {
+        transform: translate(-50%, -50%);
+        top: 13.3%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .sourceIncomeDep {
+        transform: translate(-50%, -50%);
+        top: 14.6%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeSpouseSal {
+        transform: translate(-50%, -50%);
+        top: 14.6%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeIns {
+        transform: translate(-50%, -50%);
+        top: 14.6%;
+        left: 64.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeSpousePen {
+        transform: translate(-50%, -50%);
+        top: 16%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeRent {
+        transform: translate(-50%, -50%);
+        top: 16%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeSavings {
+        transform: translate(-50%, -50%);
+        top: 16%;
+        left: 64.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeLive {
+        transform: translate(-50%, -50%);
+        top: 17.3%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .sourceIncomeFishing {
+        transform: translate(-50%, -50%);
+        top: 17.3%;
+        left: 37.6%;
+        font-size: 13px;
+      }
+       .sourceIncomeOthers{
+        top: 17.7%;
+        left: 80%;
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .assetsFirstHouse {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .assetsFirstLot {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 25%;
+        font-size: 13px;
+      }
+      .assetsFirstHo {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 37.5%;
+        font-size: 13px;
+      }
+      .assetsFirstComm {
+        transform: translate(-50%, -50%);
+        top: 21.3%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .assetsFirstFish {
+        transform: translate(-50%, -50%);
+        top: 21.3%;
+        left: 37.5%;
+        font-size: 13px;
+      }
+      .assetsFirstOthers{
+        top: 22.8%;
+        left: 34%;
+        font-size: 10px;
+        font-weight: bold;
+      }
+      .assetsSecondAuto {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 51.7%;
+        font-size: 13px;
+   
+      }
+      .assetsSecondPers {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .assetsSecondBoats {
+        transform: translate(-50%, -50%);
+        top: 20%;
+        left: 75.5%;
+        font-size: 13px;
+      }
+      .assetsSecondHeav {
+        transform: translate(-50%, -50%);
+        top: 21.3%;
+        left: 51.7%;
+        font-size: 13px;
+      }
+      .assetsSecondLap {
+        transform: translate(-50%, -50%);
+        top: 21.3%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .assetsSecondDro {
+        transform: translate(-50%, -50%);
+        top: 21.3%;
+        left: 75.5%;
+        font-size: 13px;
+      }
+      .assetsSecondMot {
+        transform: translate(-50%, -50%);
+        top: 22.5%;
+        left: 51.7%;
+        font-size: 13px;
+      }
+      .assetsSecondMob {
+        transform: translate(-50%, -50%);
+        top: 22.5%;
+        left: 64.5%;
+        font-size: 13px;
+      }
+      .assetsSecondOthers{
+        top: 22.8%;
+        left: 84.3%;
+        font-weight: bold;
+      }
+      .sixtyab {
+        transform: translate(-50%, -50%);
+        top: 25%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .fiftyab {
+        transform: translate(-50%, -50%);
+        top: 25%;
+        left: 25%;
+        font-size: 13px;
+      }
+      .fourtyab {
+        transform: translate(-50%, -50%);
+        top: 25%;
+        left: 37.5%;
+        font-size: 13px;
+      }
+      .thirtyab {
+        transform: translate(-50%, -50%);
+        top: 26.4%;
+        left: 12.4%;
+        font-size: 13px;
+      }
+      .twentyab {
+        transform: translate(-50%, -50%);
+        top: 26.4%;
+        left: 24.8%;
+        font-size: 13px;
+      }
+      .tenab {
+        transform: translate(-50%, -50%);
+        top: 26.2%;
+        left: 37.5%;
+        font-size: 13px;
+      }
+      .fiveab {
+        transform: translate(-50%, -50%);
+        top: 27.5%;
+        left: 12.6%;
+        font-size: 13px;
+      }
+      .oneab {
+        transform: translate(-50%, -50%);
+        top: 27.5%;
+        left: 24.8%;
+        font-size: 13px;
+      }
+      .onebel {
+        transform: translate(-50%, -50%);
+        top: 27.5%;
+        left: 37.5%;
+        font-size: 13px;
+      }
+      .problemsLack {
+        transform: translate(-50%, -50%);
+        top: 26.2%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .problemsLoss {
+        transform: translate(-50%, -50%);
+        top: 27.5%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .problemsSkills {
+        transform: translate(-50%, -50%);
+        top: 28.7%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .problemsLive {
+        transform: translate(-50%, -50%);
+        top: 30%;
+        left: 51.2%;
+        font-size: 13px;
+      }
+      .problemsOthers {
+        top: 31.8%;
+        left: 71%;
+        font-weight: bold;
+      }
+      .bloodTypeO {
+        transform: translate(-50%, -50%);
+        top: 35.3%;
+        left: 21.2%;
+        font-size: 13px;
+      }
+      .bloodTypeA {
+        transform: translate(-50%, -50%);
+        top: 35.3%;
+        left: 26%;
+        font-size: 13px;
+      }
+      .bloodTypeB {
+        transform: translate(-50%, -50%);
+        top: 35.2%;
+        left: 30.5%;
+        font-size: 13px;
+      }
+      .bloodTypeAB {
+        transform: translate(-50%, -50%);
+        top: 35.3%;
+        left: 35.3%;
+        font-size: 13px;
+      }
+      .bloodTypeDo {
+        transform: translate(-50%, -50%);
+        top: 35.3%;
+        left: 39.8%;
+        font-size: 13px;
+      }
+      .physicalDisability {
+        top: 37%;
+        left: 34%;
+        font-weight: bold;
+      }
+      .medicalConcernHealth {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 37.7%;
+        left: 12%;
+      }
+      .medicalConcernHyper {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 39%;
+        left: 12%;
+      }
+      .medicalConcernArth {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 39%;
+        left: 24.3%;
+      }
+      .medicalConcernCoro {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 39%;
+        left: 37%;
+      }
+      .medicalConcernDia {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 40.3%;
+        left: 12%;
+      }
+      .medicalConcernChro {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+          top: 40.3%;
+        left: 24.3%;
+      }
+      .medicalConcernAlzh {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 41.4%;
+        left: 11.8%;
+      }
+      .medicalConcernPul {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 42.7%;
+        left: 12%;
+      }
+      .medicalConcernOthers {
+        top: 44.3%;
+        left: 34%;
+        font-weight: bold;
+      }
+      .dentalConcernNeeds {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 46.4%;
+        left: 12%;
+      }
+      .dentalConcernOthers {
+        top: 48%;
+        left: 34%;
+        font-weight: bold;
+      }
+      .opticalEye {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 50%;
+        left: 12%;
+      }
+      .opticalNeeds {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 51.2%;
+        left: 12%;
+      }
+      .opticalOthers {
+        top: 53%;
+        left: 34%;
+        font-weight: bold;
+      }
+      .hearingAural {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 35.2%;
+        left: 51.2%;
+      }
+      .hearingOthers {
+        top: 37%;
+        left: 71%;
+        font-weight: bold;
+      }
+      .socialEmotionalFeel {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 39%;
+        left: 51%;
+      }
+      .socialEmotionalFeelWor {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 40.2%;
+        left: 51%;
+      }
+      .socialEmotionalFeelIso {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 41.4%;
+        left: 51%;
+      }
+      .socialEmotionalLack {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 42.7%;
+        left: 51%;
+      }
+      .socialEmotionalLackSC {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 43.8%;
+        left: 51%;
+      }
+      .socialEmotionalOthers {
+        font-size: 10px;
+        top: 45.5%;
+        left: 71%;
+        font-weight: bold;
+      }
+      .areaDifficultyHigh {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 48.8%;
+        left: 51%;
+      }
+      .areaDifficultyLack {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 50%;
+        left: 51.2%;
+      }
+      .areaDifficultyLack1 {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 51.3%;
+        left: 51.2%;
+      }
+      .areaDifficultyOthers {
+        font-size: 10px;
+        top: 53%;
+        left: 71%;
+        font-weight: bold;
+      }
+      .medicines1 {
+        top: 55.4%;
+        left: 23.5%;
+      }
+      .medicines2 {
+        top: 55.4%;
+        left: 50%;
+      }
+      .medicines3 {
+        top: 55.4%;
+        left: 76%;
+      }
+      .medicines4 {
+        top: 56.6%;
+        left: 23.5%;
+      }
+      .medicines5 {
+        top: 56.6%;
+        left: 50%;
+      }
+      .medicines6 {
+        top: 56.6%;
+        left: 76%;
+      }
+      .medicines7 {
+        top: 57.8%;
+        left: 23.5%;
+      }
+      .medicines8 {
+        top: 57.8%;
+        left: 50%;
+      }
+      .medicines9 {
+        top: 57.8%;
+        left: 76%;
+      }
+      .medicines10 {
+        top: 59%;
+        left: 23.5%;
+      }
+      .medicines11 {
+        top: 59%;
+        left: 50%;
+      }
+      .medicines12{
+        top: 59%;
+        left: 76%;
+      }
+      .scheduledMedicalYes {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 59.6%;
+        left: 41.7%;
+      }
+      .scheduledMedicalNo {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 59.6%;
+        left: 49.3%;
+      }
+      .scheduledMedical1Yearly {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 60.8%;
+        left: 41.7%;
+      }
+      .scheduledMedical1Eve {
+        transform: translate(-50%, -50%);
+        font-size: 13px;
+        top: 60.8%;
+        left: 57%;
+      }
+      .scheduledMedical1Others {
+        top: 61.2%;
+        left: 84.7%;
+        font-weight: bold;
+      }
+      
+   
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    }
