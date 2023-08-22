@@ -1,6 +1,5 @@
 <?php
 include('../configuration/config.php');
-include("connect.php");
 $disabilities = [
     "Health problems/ ailments",
     "Hypertension",
@@ -14,7 +13,7 @@ $disabilities = [
 
 
 $query = "SELECT medicalConcern FROM people";
-$result = mysqli_query($conn, $query);
+$result = mysqli_query($conx, $query);
 $counts = array_fill_keys($disabilities, 0);
 while ($row = mysqli_fetch_assoc($result)) {
     $concerns = explode(",", $row['medicalConcern']);
@@ -27,5 +26,5 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 $labels = array_keys($counts);
 $data = array_values($counts);
-mysqli_close($conn);
+
 ?>

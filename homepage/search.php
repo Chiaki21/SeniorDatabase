@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
     exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
@@ -23,27 +22,25 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 }else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $result = $conx->query($sql);
 
-  mysqli_close($conx);
 }
 
 if (isset($_GET['searchQuery']) && !empty($_GET['searchQuery'])) {
     $searchQuery = $_GET['searchQuery'];
-    $sqlCount = "SELECT COUNT(*) as total FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' ";
-    $sqlSelect = "SELECT * FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '$searchQuery' OR medicalConcern LIKE '%$searchQuery%' ORDER BY updated_date DESC";
+    $sqlCount = "SELECT COUNT(*) as total FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%'";
+  $sqlSelect = "SELECT * FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%' ORDER BY updated_date";
 } else {
     $searchQuery = '';
     $sqlCount = "SELECT COUNT(*) as total FROM people";
 }
 
-$countResult = mysqli_query($conn, $sqlCount);
+$countResult = mysqli_query($conx, $sqlCount);
 $row = mysqli_fetch_assoc($countResult);
 $totalRecords = $row['total'];
 
-$result = mysqli_query($conn, $sqlSelect);
+$result = mysqli_query($conx, $sqlSelect);
 
 if (mysqli_num_rows($result) == 0) {
     $noPersonFound = true;
@@ -315,7 +312,9 @@ if (mysqli_num_rows($result) == 0) {
         <a href="homelog.php">
             <img src="../img/sslogo.png" alt="" class="logo-details">
         </a>
-        <span class="logo_name">Senior Solutions</span>
+        <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
         </div>
         <ul class="nav-links">
         <li>

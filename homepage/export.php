@@ -1,263 +1,35 @@
 <?php
-include('connect.php');
+include('../configuration/config.php');
 
-$filename = 'gma_senior_data.csv';
-$file = fopen($filename, 'w');
+$barangayFilter = $_GET['barangay'] ?? null;
 
-$headers = array(
-    'id',
-    'RBIID',
-    'Reference Code',
-    'Last Name',
-    'First Name',
-    'Middle Name',
-    'Extension Name',
-    'Region',
-    'Province',
-    'City',
-    'Barangay',
-    'House Number',
-    'Street',
-    'Birth Date',
-    'Birth Place',
-    'Marital Status',
-    'Gender',
-    'Contact Number',
-    'Email',
-    'Religion',
-    'Ethnic',
-    'Language',
-    'osca ID',
-    'SSS',
-    'TIN',
-    'Philhealth',
-    'Organization ID',
-    'Government ID',
-    'Capability To Travel',
-    'Service Employment',
-    'Pension',
-    'Spouse Last Name',
-    'Spouse First Name',
-    'Spouse Middle Name',
-    'Spouse Extension Name',
-    'Father Last Name',
-    'Father First Name',
-    'Father Middle Name',
-    'Father Extension Name',
-    'Mother Last Name',
-    'Mother First Name',
-    'Mother Middle Name',
-    'Child 1 FullName',
-    'Child 1 Occupation',
-    'Child 1 Income',
-    'Child 1 Age',
-    'Child 1 Work',
-    'Child 2 FullName',
-    'Child 2 Occupation',
-    'Child 2 Income',
-    'Child 2 Age',
-    'Child 2 Work',
-    'Child 3 FullName',
-    'Child 3 Occupation',
-    'Child 3 Income',
-    'Child 3 Age',
-    'Child 3 Work',
-    'Child 4 FullName',
-    'Child 4 Occupation',
-    'Child 4 Income',
-    'Child 4 Age',
-    'Child 4 Work',
-    'Dependent 1 FullName',
-    'Dependent 1 Occupation',
-    'Dependent 1 Income',
-    'Dependent 1 Age',
-    'Dependent 1 Work',
-    'Dependent 2 FullName',
-    'Dependent 2 Occupation',
-    'Dependent 2 Income',
-    'Dependent 2 Age',
-    'Dependent 2 Work',
-    'Dependent 3 FullName',
-    'Dependent 3 Occupation',
-    'Dependent 3 Income',
-    'Dependent 3 Age',
-    'Dependent 3 Work',
-    'Educational Attainment',
-    'Specialization',
-    'Specialization Others',
-    'shareSkill',
-    'shareSkill1',
-    'shareSkill2',
-	'Community Service And Involvement',
-    'Community Service And Involvement (Others)',
-    'Living / ResidingWith',
-    'Living / ResidingWith (Others)',
-    'HouseHold Condition',
-    'HouseHold Condition (Others)',
-    'SourceOfIncome',
-    'SourceOfIncome (Others)',
-    'FirstAssets',
-    'FirstAssets (Others)',
-    'SecondAssets',
-    'SecondAssets (Others)',
-    'Monthly Income',
-    'Problems',
-    'Problems (Others)',
-    'Blood Type',
-    'Physical Disability',
-    'Medical Concern',
-    'Medical Concern (Others)',
-    'Dental Concern',
-    'Dental Concern (Others)',
-    'Optical',
-    'Optical (Others)',
-    'Hearing',
-    'Hearing (Others)',
-    'Social / Emotional',
-    'Social / Emotional (Others)',
-    'Area Of Difficulty',
-    'Area Of Difficulty (Others)',
-    'Medicines',
-    'Scheduled Medical',
-    'Scheduled Medical (If Yes)',
-    'Scheduled Medical (If Yes) (Others)',
-    'PersonStatus',
-    'Date Deceased'
-);
-fputcsv($file, $headers);
-
-$query = "SELECT * FROM people";
-$result = mysqli_query($conn, $query);
-
-// Write each row of data to the file
-while ($row = mysqli_fetch_assoc($result)) {
-    $data = array(
-        $row['id'],
-        $row['RBIID'],
-        $row['referenceCode'],
-        $row['lastName'],
-        $row['firstName'],
-        $row['middleName'],
-        $row['extensionName'],
-        $row['region'],
-        $row['province'],
-        $row['city'],
-        $row['barangay'],
-        $row['houseno'],
-        $row['street'],
-        $row['birthDate'],
-        $row['birthPlace'],
-        $row['maritalStatus'],
-        $row['gender'],
-        $row['contactNumber'],
-        $row['email'],
-        $row['religion'],
-        $row['ethnic'],
-        $row['language'],
-        $row['oscaID'],
-        $row['sss'],
-        $row['tin'],
-        $row['philhealth'],
-        $row['orgID'],
-        $row['govID'],
-        $row['travel'],
-        $row['serviceEmp'],
-        $row['pension'],
-        $row['spouseLastName'],
-        $row['spouseFirstName'],
-        $row['spouseMiddleName'],
-        $row['spouseExtensionName'],
-        $row['fatherLastName'],
-        $row['fatherFirstName'],
-        $row['fatherMiddleName'],
-        $row['fatherExtensionName'],
-        $row['motherLastName'],
-        $row['motherFirstName'],
-        $row['motherMiddleName'],
-        $row['child1FullName'],
-        $row['child1Occupation'],
-        $row['child1Income'],
-        $row['child1Age'],
-        $row['child1Work'],
-        $row['child2FullName'],
-        $row['child2Occupation'],
-        $row['child2Income'],
-        $row['child2Age'],
-        $row['child2Work'],
-        $row['child3FullName'],
-        $row['child3Occupation'],
-        $row['child3Income'],
-        $row['child3Age'],
-        $row['child3Work'],
-        $row['child4FullName'],
-        $row['child4Occupation'],
-        $row['child4Income'],
-        $row['child4Age'],
-        $row['child4Work'],
-        $row['dependentFullName'],
-        $row['dependentOccupation'],
-        $row['dependentIncome'],
-        $row['dependentAge'],
-        $row['dependentWork'],
-        $row['dependent2FullName'],
-        $row['dependent2Occupation'],
-        $row['dependent2Income'],
-        $row['dependent2Age'],
-        $row['dependent2Work'],
-        $row['dependent3FullName'],
-        $row['dependent3Occupation'],
-        $row['dependent3Income'],
-        $row['dependent3Age'],
-        $row['dependent3Work'],
-        $row['educationalAttainment'],
-        $row['specialization'],
-        $row['specializationOthers'],
-        $row['shareSkill'],
-        $row['shareSkill1'],
-        $row['shareSkill2'],
-        $row['communityService'],
-        $row['communityServiceOthers'],
-        $row['residingwith'],
-        $row['residingWithOthers'],
-        $row['houseHold'],
-        $row['houseHoldOthers'],
-        $row['sourceIncome'],
-        $row['sourceIncomeOthers'],
-        $row['assetsFirst'],
-        $row['assetsFirstOthers'],
-        $row['assetsSecond'],
-        $row['assetsSecondOthers'],
-        $row['monthlyIncome'],
-        $row['problems'],
-        $row['problemsOthers'],
-        $row['bloodType'],
-        $row['physicalDisability'],
-        $row['medicalConcern'],
-        $row['medicalConcernOthers'],
-        $row['dentalConcern'],
-        $row['dentalConcernOthers'],
-        $row['optical'],
-        $row['opticalOthers'],
-        $row['hearing'],
-        $row['hearingOthers'],
-        $row['socialEmotional'],
-        $row['socialEmotionalOthers'],
-        $row['areaDifficulty'],
-        $row['areaDifficultyOthers'],
-        $row['medicines'],
-        $row['scheduledMedical'],
-        $row['scheduledMedical1'],
-        $row['scheduledMedical1Others'],
-        $row['personStatus'],
-        $row['date_deceased']
-    );
-    fputcsv($file, $data);
+$sql = "SELECT * FROM people";
+if ($barangayFilter !== null) {
+    $sql .= " WHERE barangay = '" . mysqli_real_escape_string($conx, $barangayFilter) . "'";
 }
-fclose($file);
+$result = mysqli_query($conx, $sql);
 
-header('Content-Type: application/csv');
+$columnNames = [];
+while ($fieldInfo = mysqli_fetch_field($result)) {
+    $columnNames[] = $fieldInfo->name;
+}
+$csv = implode(',', $columnNames) . "\n";
+while ($row = mysqli_fetch_assoc($result)) {
+    $escapedRow = array_map(function ($value) use ($conx) {
+        return '"' . mysqli_real_escape_string($conx, $value) . '"';
+    }, $row);
+
+    $csv .= implode(',', $escapedRow) . "\n";
+}
+if ($barangayFilter !== null) {
+    $filename = $barangayFilter . '.csv';
+} else {
+    $filename = 'GMA_Senior_Data.csv';
+}
+header('Content-Type: text/csv');
 header('Content-Disposition: attachment; filename="' . $filename . '"');
-readfile($filename);
-unlink($filename);
-mysqli_close($conn);
+
+
+echo $csv;
+mysqli_close($conx);
 ?>

@@ -2,8 +2,8 @@
 session_start();
 
 if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
-  header("Location: ../index.php");
-  exit();
+    header("Location: ../index.php");
+    exit();
 }
 
 include('../configuration/config.php');
@@ -20,17 +20,17 @@ $forStatusResult = mysqli_query($conx, $forStatus);
 $forStatusRow = mysqli_fetch_assoc($forStatusResult);
 $forStatus1 = $forStatusRow['status'];
 if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
-  include("logoutupdate.php");
-  exit();
+    include("logoutupdate.php");
+    exit();
 }
 if ($_SESSION['role'] === 'User') {
-  $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
+    $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include('../configuration/config.php');
-  $sql = "SELECT * FROM register";
-  $result = $conx->query($sql);
+    include('../configuration/config.php');
+    $sql = "SELECT * FROM register";
+    $result = $conx->query($sql);
 
-  mysqli_close($conx);
+    mysqli_close($conx);
 }
 include('../configuration/config.php');
 $id = isset($_GET['id']) ? $_GET['id'] : null;
@@ -38,10 +38,26 @@ if ($id) {
     $sql = "SELECT * FROM people WHERE id = $id";
     $result = mysqli_query($conx, $sql);
     while ($row = mysqli_fetch_array($result)) {
-      $birthDate = new DateTime($row["birthDate"]);
-      $currentDate = new DateTime();
-      $age = $currentDate->diff($birthDate)->y;
-     
+        $birthDate = $row["birthDate"];
+        $formattedBirthDate = null;
+
+        // Check for valid date formats and convert to desired format
+        if (preg_match("/^\d{2}\/\d{2}\/\d{4}$/", $birthDate)) {
+            $formattedBirthDate = $birthDate;
+        } elseif (preg_match("/^\d{4}-\d{2}-\d{2}$/", $birthDate)) {
+            $dateParts = explode('-', $birthDate);
+            $formattedBirthDate = $dateParts[1] . '/' . $dateParts[2] . '/' . $dateParts[0];
+        } elseif (preg_match("/^\d{2}-\d{2}-\d{4}$/", $birthDate)) {
+            $dateParts = explode('-', $birthDate);
+            $formattedBirthDate = $dateParts[0] . '/' . $dateParts[1] . '/' . $dateParts[2];
+        }
+
+        $age = null;
+        if ($formattedBirthDate) {
+            $birthDateObj = new DateTime($formattedBirthDate);
+            $currentDate = new DateTime();
+            $age = $currentDate->diff($birthDateObj)->y;
+        }
 ?>
 
 
@@ -403,6 +419,24 @@ input:focus {
   background-color: #46469C;
   transition: all 0.3s ease;
 }
+.view-pdf-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  margin: 5px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.view-pdf-btn:hover {
+  background-color: #2980b9;
+}
+
   </style>
 </head>
 
@@ -497,7 +531,9 @@ input:focus {
     <p class="status <?php echo strtolower($row["personStatus"]); ?>">
   Status: <?php echo $row["personStatus"]; ?>
   <?php if ($row["personStatus"] === "Deceased"): ?>
-    <a href="imgDeceased.php?id=<?php echo $row['id']; ?>" class="view-image-btn">View Image</a>
+    <br>
+    <a href="downloadpdf.php?file=<?php echo $row['deceasedCert']; ?>" class="view-pdf-btn">See PDF 1</a>
+    <a href="downloadpdf.php?file=<?php echo $row['deceasedCert1']; ?>" class="view-pdf-btn">See PDF 2</a>
   <?php endif; ?>
 </p>
 
@@ -982,7 +1018,7 @@ input:focus {
 
           <br>
          
-        <b>27. Areas of Specialization / Technical Skills (Check all applicable)</b>
+        <b>27. Areas of Specialization / Technical Skills</b>
       
 <br>
         <?php echo $row["specialization"]; ?>
@@ -1002,7 +1038,7 @@ input:focus {
         <?php echo $row["shareSkill2"]; ?>
         <hr>
 <br>
-        <b>29. Community Service and Involvement (Check all applicable)</b>
+        <b>29. Community Service and Involvement</b>
         <br>
         <?php echo $row["communityService"]; ?>
         <?php echo $row["communityServiceOthers"]; ?>
@@ -1010,7 +1046,7 @@ input:focus {
         <h1 style="background-color: lightblue; color: black">IV. Dependency Profile</h1>
 
       <br>
-        <b>30. Living / Residing with (Check all applicable)</b>
+        <b>30. Living / Residing with</b>
         <br>
         <?php echo $row["residingwith"]; ?>
         <?php echo $row["residingWithOthers"]; ?>
@@ -1027,19 +1063,19 @@ input:focus {
         <br>
         
           
-        <b>32. Source of Income and Assistance (Check all applicable)</b>
+        <b>32. Source of Income and Assistance</b>
         <br>
         <?php echo $row["sourceIncome"]; ?>
         <?php echo $row["sourceIncomeOthers"]; ?>
         <hr>
         <br>
-        <b>33. Assets: Real and Immovable Properties (Check all applicable)</b>
+        <b>33. Assets: Real and Immovable Properties</b>
         <br>
         <?php echo $row["assetsFirst"]; ?>
         <?php echo $row["assetsFirstOthers"]; ?>
           <hr>
           <br>
-        <b>34. Assets: Personal and Movable Properties (Check all applicable)</b>
+        <b>34. Assets: Personal and Movable Properties</b>
         <br>
         <?php echo $row["assetsSecond"]; ?>
         <?php echo $row["assetsSecondOthers"]; ?>
@@ -1053,7 +1089,7 @@ input:focus {
           <hr>
           <br>
           
-        <b>36. Problems / Needs Commonly Encountered (Check all applicable)</b>
+        <b>36. Problems / Needs Commonly Encountered</b>
         <br>
         <?php echo $row["problems"]; ?>
         <?php echo $row["problemsOthers"]; ?>

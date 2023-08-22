@@ -6,7 +6,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
 }
 
 include('../configuration/config.php');
-include('connect.php');
 $email = $_COOKIE['Email_Cookie'];
 
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
@@ -32,11 +31,9 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled' || $forOffline1 == 'Offline')
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $result = $conx->query($sql);
 
-  mysqli_close($conx);
 }
 $recordsPerPage = 10;
 $currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -44,15 +41,15 @@ $offset = ($currentpage - 1) * $recordsPerPage;
 
 if (isset($_GET['searchQuery']) && !empty($_GET['searchQuery'])) {
   $searchQuery = $_GET['searchQuery'];
-  $sqlCount = "SELECT COUNT(*) as total FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%'";
-  $sqlSelect = "SELECT * FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' ORDER BY updated_date DESC LIMIT $offset, $recordsPerPage";
+  $sqlCount = "SELECT COUNT(*) as total FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%'";
+  $sqlSelect = "SELECT * FROM people WHERE firstName LIKE '%$searchQuery%' OR lastName LIKE '%$searchQuery%' OR RBIID LIKE '%$searchQuery%' OR middleName LIKE '%$searchQuery%' OR medicalConcern LIKE '%$searchQuery%' OR barangay LIKE '%$searchQuery%' ORDER BY updated_date DESC LIMIT $offset, $recordsPerPage";
 } else {
   $searchQuery = '';
   $sqlCount = "SELECT COUNT(*) as total FROM people";
   $sqlSelect = "SELECT * FROM people ORDER BY updated_date DESC LIMIT $offset, $recordsPerPage";
 }
 
-$countResult = mysqli_query($conn, $sqlCount);
+$countResult = mysqli_query($conx, $sqlCount);
 $row = mysqli_fetch_assoc($countResult);
 $totalRecords = $row['total'];
 $totalPages = ceil($totalRecords / $recordsPerPage);
@@ -63,7 +60,7 @@ $startPage = max(1, $currentpage - floor($maxPagesToShow / 2));
 $endPage = min($totalPages, $startPage + $maxPagesToShow - 1);
 $startPage = max(1, $endPage - $maxPagesToShow + 1);
 
-$result = mysqli_query($conn, $sqlSelect);
+$result = mysqli_query($conx, $sqlSelect);
 ?>
 
 <!DOCTYPE html>
@@ -107,22 +104,6 @@ $result = mysqli_query($conn, $sqlSelect);
 
     .table-container {
         overflow-x: auto;
-    }
-
-    .table {
-        width: 100%;
-        border-collapse: collapse;
-    }
-
-    .table th,
-    .table td {
-        padding: 12px 15px;
-        text-align: left;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .table th {
-        background-color: #f2f2f2;
     }
 
     .btn-container {
@@ -193,18 +174,8 @@ $result = mysqli_query($conn, $sqlSelect);
         color: #000;
     }
 
-    .delete-alert {
-        background-color: #dc3545;
-        color: #fff;
-    }
 
-    button.show-modal,
-    .modal-box {
 
-        top: 50%;
-        left: 50%;
-
-    }
 
     .close-btn {
         font-size: 18px;
@@ -226,97 +197,6 @@ $result = mysqli_query($conn, $sqlSelect);
         background: red;
         border-radius: 6px;
         cursor: pointer;
-    }
-
-    .modal-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        display: none;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-    }
-
-    .modal-box {
-        background-color: #fff;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    }
-
-    .modal-box h2 {
-        margin-top: 0;
-    }
-
-    .modal-box .buttons {
-        margin-top: 20px;
-        display: flex;
-        justify-content: flex-end;
-    }
-
-    .modal-box button {
-        padding: 10px 20px;
-        border-radius: 4px;
-        margin-left: 10px;
-        cursor: pointer;
-    }
-
-    .modal-box button.close-btn {
-        background-color: #ccc;
-        color: #333;
-    }
-
-    .modal-box button.close-btn:hover {
-        background-color: #999;
-    }
-
-    .modal-box button.delete-btn {
-        background-color: #dc143c;
-        color: #fff;
-    }
-
-    .modal-box button.delete-btn:hover {
-        background-color: #b20c2b;
-    }
-
-    .exportbutton {
-        background-color: #1b8a0c;
-        color: #f1f1f1;
-        width: 200px;
-        height: 60px;
-        border: none;
-        padding: 10px 20px;
-        font-size: 16px;
-        border-radius: 4px;
-        margin-right: 10px;
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 9999;
-        cursor: pointer;
-    }
-
-    .exportbutton .exporticon {
-        width: 16px;
-        height: 16px;
-        margin-right: 8px;
-        vertical-align: middle;
-    }
-
-    .exportbutton:hover {
-        background-color: #17680c;
-    }
-
-    .exportbutton:focus {
-        outline: none;
-    }
-
-    .exportbutton:active {
-        background-color: #0e4607;
     }
 
     .person-status {
@@ -384,6 +264,131 @@ $result = mysqli_query($conn, $sqlSelect);
         pointer-events: none;
     }
 
+    .barangay-dropdown {
+        margin-top: 10px;
+    }
+
+    #barangaySelect {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+        font-size: 16px;
+        color: #333;
+        cursor: pointer;
+    }
+
+    #barangaySelect option {
+        font-size: 16px;
+        color: #333;
+    }
+
+
+
+    .exportbutton {
+        background-color: #1b8a0c;
+        color: #f1f1f1;
+        width: 200px;
+        height: 60px;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        border-radius: 4px;
+        margin-right: 10px;
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 9999;
+        cursor: pointer;
+    }
+
+    .exportbutton .exporticon {
+        width: 16px;
+        height: 16px;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .exportbutton:hover {
+        background-color: #17680c;
+    }
+
+    .exportbutton:focus {
+        outline: none;
+    }
+
+    .exportbutton:active {
+        background-color: #0e4607;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 10000;
+    }
+
+    .modal-content {
+        background-color: #fff;
+        width: 80%;
+        /* Change the width to auto */
+        max-width: 100%;
+        /* Set a maximum width to avoid overly wide content */
+        padding: 20px;
+        border-radius: 4px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .item-list {
+        list-style: none;
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 15px;
+        padding: 15px;
+    }
+
+    .modal-item {
+        padding: 12px;
+        background-color: #f2f2f2;
+        /* Initial background color */
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
+
+    .modal-item:hover {
+        background-color: #ddd;
+        /* Change to the desired gray color */
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        font-size: 30px;
+        color: #333;
+        /* Change the color of the X symbol */
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        /* Add transition for color change */
+    }
+
+    .close-button:hover {
+        color: black;
+        /* Change to the desired hover color */
+    }
+
+
     @media only screen and (max-width: 480px) {
 
         .pagination a,
@@ -414,7 +419,9 @@ $result = mysqli_query($conn, $sqlSelect);
             <a href="homelog.php">
                 <img src="../img/sslogo.png" alt="" class="logo-details">
             </a>
-            <span class="logo_name">Senior Solutions</span>
+            <a href="homelog.php">
+                <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+            </a>
         </div>
         <ul class="nav-links">
             <li>
@@ -457,12 +464,51 @@ $result = mysqli_query($conn, $sqlSelect);
                 <i class="bx bx-menu sidebarBtn"></i>
                 <span class="dashboard">Record Lists</span>
             </div>
-    
+            <div class="barangay-dropdown">
+                <select id="barangaySelect" onchange="handleBarangayChange()">
+                    <option value="" selected disabled>Select Barangay</option>
+                    <option>Aldiano Olaes</option>
+                    <option>Poblacion 1</option>
+                    <option>Poblacion 2</option>
+                    <option>Poblacion 3</option>
+                    <option>Poblacion 4</option>
+                    <option>Poblacion 5 - FVR</option>
+                    <option>Poblacion 5 - Proper</option>
+                    <option>Benjamin Tirona</option>
+                    <option>Bernardo Pulido</option>
+                    <option>Epifanio Malia</option>
+                    <option>Francisco De Castro</option>
+                    <option>Francisco De Castro - Sunshine</option>
+                    <option>Francisco De Castro - Mandarin</option>
+                    <option>Francisco De Castro - Kanebo</option>
+                    <option>Francisco De Castro - Monteverde</option>
+                    <option>Francisco De Castro - Rolling Hills</option>
+                    <option>Francisco Reyes</option>
+                    <option>Fiorello Calimag</option>
+                    <option>Gavino Maderan</option>
+                    <option>Gregoria De Jesus</option>
+                    <option>Inocencio Salud</option>
+                    <option>Jacinto Lumbreras</option>
+                    <option>Kapitan Kua</option>
+                    <option>Koronel Jose P. Elises</option>
+                    <option>Macario Dacon</option>
+                    <option>Marcelino Memije</option>
+                    <option>Nicolasa Virata</option>
+                    <option>Pantaleon Granados</option>
+                    <option>Ramon Cruz Sr.</option>
+                    <option>San Gabriel</option>
+                    <option>San Jose</option>
+                    <option>Severino De Las Alas</option>
+                    <option>Tiniente Tiago</option>
+                </select>
+            </div>
+
+
             <form action="search.php" method="GET" class="search-box">
                 <input type="text" placeholder="Search..." name="searchQuery" id="searchInput" required />
                 <button type="submit" class="bx bx-search"></button>
             </form>
-            
+
 
             <div class="profile-details">
                 <img src="../img/profilepicture.jpg" alt="">
@@ -472,20 +518,64 @@ $result = mysqli_query($conn, $sqlSelect);
             echo $_SESSION['user_name'];
         }
         ?>
-
                 </span>
             </div>
+
         </nav>
         <div class="home-content">
 
+         
 
-            <div class="exportlog" id="exportlog" onclick="exportLogData();">
-                <input type="hidden" name="user_name" value="<?php echo $_SESSION['user_name']; ?>">
-                <button class="exportbutton" id="exportbutton" onclick="exportData()">
+            <div class="exportlog" id="exportlog">
+                <button class="exportbutton" id="exportbutton">
                     <img src="images/printicon.png" class="exporticon">
                     Export to CSV
                 </button>
+                <div class="modal" id="modal">
+                    <div class="modal-content">
+                        <button class="close-button">X</button>
+                        <h2>Select a Barangay to Export</h2>
+                        <ul class="item-list">
+                            <li class="modal-item" id="export-all">Export All</li>
+                            <li class="modal-item">Aldiano Olaes</li>
+                            <li class="modal-item">Poblacion 1</li>
+                            <li class="modal-item">Poblacion 2</li>
+                            <li class="modal-item">Poblacion 3</li>
+                            <li class="modal-item">Poblacion 4</li>
+                            <li class="modal-item">Poblacion 5 - FVR</li>
+                            <li class="modal-item">Poblacion 5 - Proper</li>
+                            <li class="modal-item">Benjamin Tirona</li>
+                            <li class="modal-item">Bernardo Pulido</li>
+                            <li class="modal-item">Epifanio Malia</li>
+                            <li class="modal-item">Francisco De Castro</li>
+                            <li class="modal-item">Francisco De Castro - Sunshine</li>
+                            <li class="modal-item">Francisco De Castro - Mandarin</li>
+                            <li class="modal-item">Francisco De Castro - Kanebo</li>
+                            <li class="modal-item">Francisco De Castro - Monteverde</li>
+                            <li class="modal-item">Francisco De Castro - Rolling Hills</li>
+                            <li class="modal-item">Francisco Reyes</li>
+                            <li class="modal-item">Fiorello Calimag</li>
+                            <li class="modal-item">Gavino Maderan</li>
+                            <li class="modal-item">Gregoria De Jesus</li>
+                            <li class="modal-item">Inocencio Salud</li>
+                            <li class="modal-item">Jacinto Lumbreras</li>
+                            <li class="modal-item">Kapitan Kua</li>
+                            <li class="modal-item">Koronel Jose P. Elises</li>
+                            <li class="modal-item">Macario Dacon</li>
+                            <li class="modal-item">Marcelino Memije</li>
+                            <li class="modal-item">Nicolasa Virata</li>
+                            <li class="modal-item">Pantaleon Granados</li>
+                            <li class="modal-item">Ramon Cruz Sr.</li>
+                            <li class="modal-item">San Gabriel</li>
+                            <li class="modal-item">San Jose</li>
+                            <li class="modal-item">Severino De Las Alas</li>
+                            <li class="modal-item">Tiniente Tiago</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
+
+
 
             <div class="table-container">
                 <table class="table">
@@ -510,11 +600,11 @@ $result = mysqli_query($conn, $sqlSelect);
                             <td><?php echo $data['middleName']; ?></td>
                             <td><?php echo $data['barangay']; ?></td>
                             <td>
-                <?php 
+                                <?php 
                 $updated_date = $data['updated_date'];
                 echo ($updated_date !== '0000-00-00 00:00:00') ? date('m-d-y g:ia', strtotime($updated_date)) : '';
                 ?>
-            </td>
+                            </td>
                             <td
                                 class="person-status <?php echo strtolower($data['personStatus']) === 'active' ? 'my-active-class' : (strtolower($data['personStatus']) === 'deceased' ? 'my-deceased-class' : ''); ?>">
                                 <?php if (strtolower($data['personStatus']) === 'active'): ?>
@@ -568,34 +658,70 @@ $result = mysqli_query($conn, $sqlSelect);
 
     <script src="homescript.js"></script>
     <script>
-    function exportData() {
-        window.location.href = 'export.php';
-    }
+  const exportButton = document.querySelector('#exportbutton');
+const modal = document.querySelector('#modal');
+const closeBtn = document.querySelector('.close-button');
+const modalItems = document.querySelectorAll('.modal-item');
 
-    function exportLogData() {
-        const userName = document.querySelector('input[name="user_name"]').value;
-        const actionText = "Exported a CSV File";
-        const data = {
-            user_name: userName,
-            action: actionText
-        };
-        const xhr = new XMLHttpRequest();
-        xhr.open("POST", "exportlog.php", true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {} else {}
-            }
-        };
-        xhr.send(JSON.stringify(data));
+exportButton.addEventListener('click', function() {
+    modal.style.display = 'block';
+});
+
+closeBtn.addEventListener('click', function() {
+    modal.style.display = 'none';
+});
+
+modal.addEventListener('click', function(event) {
+    if (event.target === modal) {
+        modal.style.display = 'none';
     }
-    const exportLog = document.querySelector('#exportlog');
-    exportLog.addEventListener("click", function(event) {
-        if (event.target.tagName.toLowerCase() !== 'button') {
-            exportData();
-            exportLogData();
+});
+
+modalItems.forEach(item => {
+    item.addEventListener('click', function() {
+        if (item.id === 'export-all') {
+            exportAllData();
+            const actionText = 'Exported a CSV for all the barangay';
+            insertLogData(actionText);
+        } else {
+            const selectedBarangay = item.textContent.trim();
+            exportByBarangay(selectedBarangay);
+            const actionText = `Exported a CSV of ${selectedBarangay}`;
+            insertLogData(actionText);
         }
     });
+});
+
+function exportAllData() {
+    window.location.href = 'export.php';
+}
+
+function exportByBarangay(barangay) {
+    window.location.href = `export.php?barangay=${encodeURIComponent(barangay)}`;
+}
+
+function insertLogData(action) {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', 'exportlog.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            // You can perform additional actions here if needed
+        }
+    };
+    
+    const data = `action=${encodeURIComponent(action)}`;
+    xhr.send(data);
+}
+
+
+
+
+    function handleBarangayChange() {
+        var select = document.getElementById("barangaySelect");
+        var selectedValue = select.options[select.selectedIndex].value;
+        window.location.href = "barangay.php?barangay=" + encodeURIComponent(selectedValue);
+    }
     </script>
     <?php endif; ?>
 </body>

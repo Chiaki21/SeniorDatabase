@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
@@ -42,8 +41,6 @@ if ($_SESSION['role'] === 'User') {
 } else {
   $registerQuery = "SELECT * FROM register";
   $registerResult = mysqli_query($conx, $registerQuery);
-
-  mysqli_close($conx);
 }
 ?>
 
@@ -354,7 +351,9 @@ button.show-modal,
       <a href="homelog.php">
         <img src="../img/sslogo.png" alt="" class="logo-details">
       </a>
-      <span class="logo_name">Senior Solutions</span>
+      <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
     </div>
     <ul class="nav-links">
     <li>

@@ -1,10 +1,10 @@
 <?php
-include("connect.php");
+include('../configuration/config.php');
 
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($id) {
     $sql = "SELECT * FROM people WHERE id = $id";
-    $result = mysqli_query($conn, $sql);
+    $result = mysqli_query($conx, $sql);
     $row = mysqli_fetch_assoc($result);
     
     $RBIID = $row['RBIID'];
@@ -134,6 +134,28 @@ if ($id) {
         }
     }
 
+    if (strpos($birthDate, '-') !== false) {
+        // Format is yyyy-mm-dd or mm-dd-yyyy
+        $dateArray = preg_split('/[-\/]/', $birthDate);
+        if (strlen($dateArray[0]) === 4) {
+            // yyyy-mm-dd format
+            $year = substr($dateArray[0], -2);
+            $month = $dateArray[1];
+            $day = $dateArray[2];
+        } else {
+            // mm-dd-yyyy format
+            $year = substr($dateArray[2], -2);
+            $month = $dateArray[0];
+            $day = $dateArray[1];
+        }
+    } else {
+        // Format is mm/dd/yyyy
+        list($month, $day, $year) = explode('/', $birthDate);
+        $year = substr($year, -2);
+    }
+    
+    // Convert to mdy format without spacing
+    $mdyFormat = sprintf('%02d%02d%02d', $month, $day, $year);
 
 }
 ?>
@@ -141,61 +163,63 @@ if ($id) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<link rel="stylesheet" href="printstyle.css?v=<?php echo time(); ?>" />
-<meta charset="UTF-8" />
-  <title>Print | <?php echo $row["firstName"]; ?></title>
-  <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="icon" href="../img/sslogo.png">
+    <link rel="stylesheet" href="printstyle.css?v=<?php echo time(); ?>" />
+    <meta charset="UTF-8" />
+    <title>Print | <?php echo $row["firstName"]; ?></title>
+    <link href="https://unpkg.com/boxicons@2.0.7/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="../img/sslogo.png">
 </head>
+
 <body>
 
-<div class="printimg">
-  <div class="firstWholePage">
-    <div class="page">
-      <div class="image-container">
-        <div class="userimage">
-          <?php if ($row['imageup'] && $row['imageup'] !== 'imageuploaded/') : ?>
-            <img src="<?php echo $row['imageup']; ?>" class="uploaded-image">
-          <?php else: ?>
-            <p class="no-image"></p>
-          <?php endif; ?>
-        </div>
-      </div>
-      <img class="img1" src="images/page1.jpg" alt="">
-  <div class="inputs">
-    <div class="firstPage">
+    <div class="printimg">
+        <div class="firstWholePage">
+            <div class="page">
+                <div class="image-container">
+                    <div class="userimage">
+                        <?php if ($row['imageup'] && $row['imageup'] !== 'imageuploaded/') : ?>
+                        <img src="<?php echo $row['imageup']; ?>" class="uploaded-image">
+                        <?php else: ?>
+                        <p class="no-image"></p>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <img class="img1" src="images/pg01.jpg" alt="">
+                <div class="inputs">
+                    <div class="firstPage">
 
-    <p class="referenceCode"><?php echo $referenceCode; ?></p>
-  <p class="lastName"><?php echo $lastName; ?></p>
-  <p class="firstName"><?php echo $firstName; ?></p>
-  <p class="middleName"><?php echo $middleName; ?></p>
-  <p class="extensionName"><?php echo $extensionName; ?></p>
-  <p class="region"><?php echo $region; ?></p>
-  <p class="province"><?php echo $province; ?></p>
-  <p class="city"><?php echo $city; ?></p>
-  <p class="barangay"><?php echo $barangay; ?></p>
-  <p class="houseno"><?php echo $houseno; ?></p>
-  <p class="street"><?php echo $street; ?></p>
-  <p class="birthDate"><?php echo date('mdy', strtotime($birthDate)); ?></p>
-  <p class="birthPlace"><?php echo $birthPlace; ?></p>
-  <p class="maritalStatus"><?php echo $maritalStatus; ?></p>
-  <p class="gender"><?php echo $gender; ?></p>
-  <p class="contactNumber"><?php echo $contactNumber; ?></p>
-  <p class="email"><?php echo $email; ?></p>
-  <p class="religion"><?php echo $religion; ?></p>
-  <p class="ethnic"><?php echo $ethnic; ?></p>
-  <p class="language"><?php echo $language; ?></p>
-  <p class="oscaID"><?php echo $oscaID; ?></p>
-  <p class="sss"><?php echo $sss; ?></p>
-  <p class="tin"><?php echo $tin; ?></p>
-  <p class="philhealth"><?php echo $philhealth; ?></p>
-  <p class="orgID"><?php echo $orgID; ?></p>
-  <p class="govID"><?php echo $govID; ?></p>
+                        <p class="referenceCode"><?php echo $referenceCode; ?></p>
+                        <p class="lastName"><?php echo $lastName; ?></p>
+                        <p class="firstName"><?php echo $firstName; ?></p>
+                        <p class="middleName"><?php echo $middleName; ?></p>
+                        <p class="extensionName"><?php echo $extensionName; ?></p>
+                        <p class="region"><?php echo $region; ?></p>
+                        <p class="province"><?php echo $province; ?></p>
+                        <p class="city"><?php echo $city; ?></p>
+                        <p class="barangay"><?php echo $barangay; ?></p>
+                        <p class="houseno"><?php echo $houseno; ?></p>
+                        <p class="street"><?php echo $street; ?></p>
+                        <p class="birthDate"><?php echo $mdyFormat; ?></p>
+                        <p class="birthPlace"><?php echo $birthPlace; ?></p>
+                        <p class="maritalStatus"><?php echo $maritalStatus; ?></p>
+                        <p class="gender"><?php echo $gender; ?></p>
+                        <p class="contactNumber"><?php echo $contactNumber; ?></p>
+                        <p class="email"><?php echo $email; ?></p>
+                        <p class="religion"><?php echo $religion; ?></p>
+                        <p class="ethnic"><?php echo $ethnic; ?></p>
+                        <p class="language"><?php echo $language; ?></p>
+                        <p class="oscaID"><?php echo $oscaID; ?></p>
+                        <p class="sss"><?php echo $sss; ?></p>
+                        <p class="tin"><?php echo $tin; ?></p>
+                        <p class="philhealth"><?php echo $philhealth; ?></p>
+                        <p class="orgID"><?php echo $orgID; ?></p>
+                        <p class="govID"><?php echo $govID; ?></p>
 
-  <?php
+                        <?php
 $travelOptions = explode(',', $row['travel']);
 
 $displayText = "";
@@ -214,59 +238,56 @@ foreach ($travelOptions as $option) {
 }
 echo $displayText;
 ?>
+                        <p class="serviceEmp"><?php echo $serviceEmp; ?></p>
+                        <p class="pension"><?php echo $pension; ?></p>
+                        <p class="spouseLastName"><?php echo $spouseLastName; ?></p>
+                        <p class="spouseFirstName"><?php echo $spouseFirstName; ?></p>
+                        <p class="spouseMiddleName"><?php echo $spouseMiddleName; ?></p>
+                        <p class="spouseExtensionName"><?php echo $spouseExtensionName; ?></p>
+                        <p class="fatherLastName"><?php echo $fatherLastName; ?></p>
+                        <p class="fatherFirstName"><?php echo $fatherFirstName; ?></p>
+                        <p class="fatherMiddleName"><?php echo $fatherMiddleName; ?></p>
+                        <p class="fatherExtensionName"><?php echo $fatherExtensionName; ?></p>
+                        <p class="motherLastName"><?php echo $motherLastName; ?></p>
+                        <p class="motherFirstName"><?php echo $motherFirstName; ?></p>
+                        <p class="motherMiddleName"><?php echo $motherMiddleName; ?></p>
+                        <p class="child1FullName"><?php echo $child1FullName; ?></p>
+                        <p class="child1Occupation"><?php echo $child1Occupation; ?></p>
+                        <p class="child1Income"><?php echo $child1Income; ?></p>
+                        <p class="child1Age"><?php echo $child1Age; ?></p>
+                        <p class="child1Work"><?php echo $child1Work; ?></p>
+                        <p class="child2FullName"><?php echo $child2FullName; ?></p>
+                        <p class="child2Occupation"><?php echo $child2Occupation; ?></p>
+                        <p class="child2Income"><?php echo $child2Income; ?></p>
+                        <p class="child2Age"><?php echo $child2Age; ?></p>
+                        <p class="child2Work"><?php echo $child2Work; ?></p>
+                        <p class="child3FullName"><?php echo $child3FullName; ?></p>
+                        <p class="child3Occupation"><?php echo $child3Occupation; ?></p>
+                        <p class="child3Income"><?php echo $child3Income; ?></p>
+                        <p class="child3Age"><?php echo $child3Age; ?></p>
+                        <p class="child3Work"><?php echo $child3Work; ?></p>
+                        <p class="child4FullName"><?php echo $child4FullName; ?></p>
+                        <p class="child4Occupation"><?php echo $child4Occupation; ?></p>
+                        <p class="child4Income"><?php echo $child4Income; ?></p>
+                        <p class="child4Age"><?php echo $child4Age; ?></p>
+                        <p class="child4Work"><?php echo $child4Work; ?></p>
+                        <p class="dependentFullName"><?php echo $dependentFullName; ?></p>
+                        <p class="dependentOccupation"><?php echo $dependentOccupation; ?></p>
+                        <p class="dependentIncome"><?php echo $dependentIncome; ?></p>
+                        <p class="dependentAge"><?php echo $dependentAge; ?></p>
+                        <p class="dependentWork"><?php echo $dependentWork; ?></p>
+                        <p class="dependent2FullName"><?php echo $dependent2FullName; ?></p>
+                        <p class="dependent2Occupation"><?php echo $dependent2Occupation; ?></p>
+                        <p class="dependent2Income"><?php echo $dependent2Income; ?></p>
+                        <p class="dependent2Age"><?php echo $dependent2Age; ?></p>
+                        <p class="dependent2Work"><?php echo $dependent2Work; ?></p>
+                        <p class="dependent3FullName"><?php echo $dependent3FullName; ?></p>
+                        <p class="dependent3Occupation"><?php echo $dependent3Occupation; ?></p>
+                        <p class="dependent3Income"><?php echo $dependent3Income; ?></p>
+                        <p class="dependent3Age"><?php echo $dependent3Age; ?></p>
+                        <p class="dependent3Work"><?php echo $dependent3Work; ?></p>
 
-
-
-  <p class="serviceEmp"><?php echo $serviceEmp; ?></p>
-  <p class="pension"><?php echo $pension; ?></p>
-  <p class="spouseLastName"><?php echo $spouseLastName; ?></p>
-  <p class="spouseFirstName"><?php echo $spouseFirstName; ?></p>
-  <p class="spouseMiddleName"><?php echo $spouseMiddleName; ?></p>
-  <p class="spouseExtensionName"><?php echo $spouseExtensionName; ?></p>
-  <p class="fatherLastName"><?php echo $fatherLastName; ?></p>
-  <p class="fatherFirstName"><?php echo $fatherFirstName; ?></p>
-  <p class="fatherMiddleName"><?php echo $fatherMiddleName; ?></p>
-  <p class="fatherExtensionName"><?php echo $fatherExtensionName; ?></p>
-  <p class="motherLastName"><?php echo $motherLastName; ?></p>
-  <p class="motherFirstName"><?php echo $motherFirstName; ?></p>
-  <p class="motherMiddleName"><?php echo $motherMiddleName; ?></p>
-  <p class="child1FullName"><?php echo $child1FullName; ?></p>
-  <p class="child1Occupation"><?php echo $child1Occupation; ?></p>
-  <p class="child1Income"><?php echo $child1Income; ?></p>
-  <p class="child1Age"><?php echo $child1Age; ?></p>
-  <p class="child1Work"><?php echo $child1Work; ?></p>
-  <p class="child2FullName"><?php echo $child2FullName; ?></p>
-  <p class="child2Occupation"><?php echo $child2Occupation; ?></p>
-  <p class="child2Income"><?php echo $child2Income; ?></p>
-  <p class="child2Age"><?php echo $child2Age; ?></p>
-  <p class="child2Work"><?php echo $child2Work; ?></p>
-  <p class="child3FullName"><?php echo $child3FullName; ?></p>
-  <p class="child3Occupation"><?php echo $child3Occupation; ?></p>
-  <p class="child3Income"><?php echo $child3Income; ?></p>
-  <p class="child3Age"><?php echo $child3Age; ?></p>
-  <p class="child3Work"><?php echo $child3Work; ?></p>
-  <p class="child4FullName"><?php echo $child4FullName; ?></p>
-  <p class="child4Occupation"><?php echo $child4Occupation; ?></p>
-  <p class="child4Income"><?php echo $child4Income; ?></p>
-  <p class="child4Age"><?php echo $child4Age; ?></p>
-  <p class="child4Work"><?php echo $child4Work; ?></p>
-  <p class="dependentFullName"><?php echo $dependentFullName; ?></p>
-  <p class="dependentOccupation"><?php echo $dependentOccupation; ?></p>
-  <p class="dependentIncome"><?php echo $dependentIncome; ?></p>
-  <p class="dependentAge"><?php echo $dependentAge; ?></p>
-  <p class="dependentWork"><?php echo $dependentWork; ?></p>
-  <p class="dependent2FullName"><?php echo $dependent2FullName; ?></p>
-  <p class="dependent2Occupation"><?php echo $dependent2Occupation; ?></p>
-  <p class="dependent2Income"><?php echo $dependent2Income; ?></p>
-  <p class="dependent2Age"><?php echo $dependent2Age; ?></p>
-  <p class="dependent2Work"><?php echo $dependent2Work; ?></p>
-  <p class="dependent3FullName"><?php echo $dependent3FullName; ?></p>
-  <p class="dependent3Occupation"><?php echo $dependent3Occupation; ?></p>
-  <p class="dependent3Income"><?php echo $dependent3Income; ?></p>
-  <p class="dependent3Age"><?php echo $dependent3Age; ?></p>
-  <p class="dependent3Work"><?php echo $dependent3Work; ?></p>
-
-  <?php
+                        <?php
   $educationalAttainment = trim($row['educationalAttainment']);
 
   switch ($educationalAttainment) {
@@ -303,7 +324,7 @@ echo $displayText;
   echo $displayText;
   ?>
 
-<?php
+                        <?php
 $specializations = explode(',', $row['specialization']);
 
 $displayText = "";
@@ -379,14 +400,14 @@ echo $displayText;
 
 
 
-  
-    <p class="specializationOthers"><?php echo $specializationOthers; ?></p>
 
-    <p class="shareSkill"><?php echo $shareSkill; ?></p>
-    <p class="shareSkill1"><?php echo $shareSkill1; ?></p>
-    <p class="shareSkill2"><?php echo $shareSkill2; ?></p>
+                        <p class="specializationOthers"><?php echo $specializationOthers; ?></p>
 
-    <?php
+                        <p class="shareSkill"><?php echo $shareSkill; ?></p>
+                        <p class="shareSkill1"><?php echo $shareSkill1; ?></p>
+                        <p class="shareSkill2"><?php echo $shareSkill2; ?></p>
+
+                        <?php
 $communityServices = explode(',', $communityService);
 
 $displayText = "";
@@ -433,18 +454,18 @@ foreach ($communityServices as $service) {
 echo $displayText;
 ?>
 
-    <p class="communityServiceOthers"><?php echo $communityServiceOthers; ?></p>
-</div>
-          </div>
+                        <p class="communityServiceOthers"><?php echo $communityServiceOthers; ?></p>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <div class="page">
-  <img class="img2" src="images/page2.jpg" alt="">
-  <div class="inputs2">
-    <div class="secondPage">
+        <div class="page">
+            <img class="img2" src="images/page2.jpg" alt="">
+            <div class="inputs2">
+                <div class="secondPage">
 
-    <?php
+                    <?php
 $residintwiths = explode(',', $residingwith);
 
 $displayText = "";
@@ -486,11 +507,11 @@ foreach ($residintwiths as $res) {
 }
 echo $displayText;
 ?>
-    
 
-    <p class="residingWithOthers"><?php echo $residingWithOthers; ?></p>
-    
-    <?php
+
+                    <p class="residingWithOthers"><?php echo $residingWithOthers; ?></p>
+
+                    <?php
 $houseHoldOptions = explode(',', $row['houseHold']);
 
 $displayText = "";
@@ -523,9 +544,9 @@ foreach ($houseHoldOptions as $option) {
 }
 echo $displayText;
 ?>
-    <p class="houseHoldOthers"><?php echo $houseHoldOthers; ?></p>
+                    <p class="houseHoldOthers"><?php echo $houseHoldOthers; ?></p>
 
-    <?php
+                    <?php
 $sourceIncomeOptions = explode(',', $sourceIncome);
 
 $displayText = "";
@@ -573,9 +594,9 @@ foreach ($sourceIncomeOptions as $option) {
 }
 echo $displayText;
 ?>
-  <p class="sourceIncomeOthers"><?php echo $sourceIncomeOthers; ?></p>
+                    <p class="sourceIncomeOthers"><?php echo $sourceIncomeOthers; ?></p>
 
-  <?php
+                    <?php
 $assetsFirstOptions = explode(',', $assetsFirst);
 
 $displayText = "";
@@ -603,9 +624,9 @@ foreach ($assetsFirstOptions as $option) {
 }
 echo $displayText;
 ?>
-  <p class="assetsFirstOthers"><?php echo $assetsFirstOthers; ?></p>
+                    <p class="assetsFirstOthers"><?php echo $assetsFirstOthers; ?></p>
 
-  <?php
+                    <?php
 $assetsSecondOptions = explode(',', $assetsSecond);
 
 $displayText = "";
@@ -642,9 +663,9 @@ foreach ($assetsSecondOptions as $option) {
 }
 echo $displayText;
 ?>
-  <p class="assetsSecondOthers"><?php echo $assetsSecondOthers; ?></p>
-  
-  <?php
+                    <p class="assetsSecondOthers"><?php echo $assetsSecondOthers; ?></p>
+
+                    <?php
   if ($row['monthlyIncome'] === '60,000 and above') {
     $displayText = '<p class="sixtyab">✔</p>';
   } elseif ($row['monthlyIncome'] === '50,000 to 60,000') {
@@ -668,8 +689,8 @@ echo $displayText;
   }
   echo $displayText;
   ?>
-  
-  <?php
+
+                    <?php
 $problemsOptions = explode(',', $problems);
 
 $displayText = "";
@@ -694,9 +715,9 @@ foreach ($problemsOptions as $option) {
 }
 echo $displayText;
 ?>
-  <p class="problemsOthers"><?php echo $problemsOthers; ?></p>
+                    <p class="problemsOthers"><?php echo $problemsOthers; ?></p>
 
-  <?php
+                    <?php
   if ($row['bloodType'] === 'O') {
     $displayText = '<p class="bloodTypeO">✔</p>';
   } elseif ($row['bloodType'] === 'A') {
@@ -712,10 +733,10 @@ echo $displayText;
   }
   echo $displayText;
   ?>
-  
-  <p class="physicalDisability"><?php echo $physicalDisability; ?></p>
 
-  <?php
+                    <p class="physicalDisability"><?php echo $physicalDisability; ?></p>
+
+                    <?php
 $medicalConcernOptions = explode(',', $medicalConcern);
 
 $displayText = "";
@@ -752,10 +773,10 @@ foreach ($medicalConcernOptions as $option) {
 }
 echo $displayText;
 ?>
-  <p class="medicalConcernOthers"><?php echo $medicalConcernOthers; ?></p>
+                    <p class="medicalConcernOthers"><?php echo $medicalConcernOthers; ?></p>
 
 
-  <?php
+                    <?php
   if ($row['dentalConcern'] === 'Needs Dental Care') {
     $displayText = '<p class="dentalConcernNeeds">✔</p>';
   }  else {
@@ -764,9 +785,9 @@ echo $displayText;
   echo $displayText;
   ?>
 
-<p class="dentalConcernOthers"><?php echo $dentalConcernOthers; ?></p>
+                    <p class="dentalConcernOthers"><?php echo $dentalConcernOthers; ?></p>
 
-<?php
+                    <?php
 $opticalOptions = explode(',', $row['optical']);
 
 $displayText = "";
@@ -788,9 +809,9 @@ echo $displayText;
 
 
 
-<p class="opticalOthers"><?php echo $opticalOthers; ?></p>
+                    <p class="opticalOthers"><?php echo $opticalOthers; ?></p>
 
-<?php
+                    <?php
   if ($row['hearing'] === 'Aural impairment / Hearing impairment') {
     $displayText = '<p class="hearingAural">✔</p>';
   }  else {
@@ -799,11 +820,11 @@ echo $displayText;
   echo $displayText;
   ?>
 
-<p class="hearingOthers"><?php echo $hearingOthers; ?></p>
+                    <p class="hearingOthers"><?php echo $hearingOthers; ?></p>
 
 
 
-<?php
+                    <?php
 $socialEmotionalOptions = explode(',', $row['socialEmotional']);
 
 $displayText = "";
@@ -834,10 +855,10 @@ echo $displayText;
 ?>
 
 
-<p class="socialEmotionalOthers"><?php echo $socialEmotionalOthers; ?></p>
+                    <p class="socialEmotionalOthers"><?php echo $socialEmotionalOthers; ?></p>
 
 
-<?php
+                    <?php
 $areaDifficultyOptions = explode(',', $row['areaDifficulty']);
 
 $displayText = "";
@@ -861,23 +882,23 @@ foreach ($areaDifficultyOptions as $option) {
 echo $displayText;
 ?>
 
-    <p class="areaDifficultyOthers"><?php echo $areaDifficultyOthers; ?></p>
+                    <p class="areaDifficultyOthers"><?php echo $areaDifficultyOthers; ?></p>
 
 
-    <p class="medicines1"><?php echo $medicine1; ?></p>
-<p class="medicines2"><?php echo $medicine2; ?></p>
-<p class="medicines3"><?php echo $medicine3; ?></p>
-<p class="medicines4"><?php echo $medicine4; ?></p>
-<p class="medicines5"><?php echo $medicine5; ?></p>
-<p class="medicines6"><?php echo $medicine6; ?></p>
-<p class="medicines7"><?php echo $medicine7; ?></p>
-<p class="medicines8"><?php echo $medicine8; ?></p>
-<p class="medicines9"><?php echo $medicine9; ?></p>
-<p class="medicines10"><?php echo $medicine10; ?></p>
-<p class="medicines11"><?php echo $medicine11; ?></p>
-<p class="medicines12"><?php echo $medicine12; ?></p>
+                    <p class="medicines1"><?php echo $medicine1; ?></p>
+                    <p class="medicines2"><?php echo $medicine2; ?></p>
+                    <p class="medicines3"><?php echo $medicine3; ?></p>
+                    <p class="medicines4"><?php echo $medicine4; ?></p>
+                    <p class="medicines5"><?php echo $medicine5; ?></p>
+                    <p class="medicines6"><?php echo $medicine6; ?></p>
+                    <p class="medicines7"><?php echo $medicine7; ?></p>
+                    <p class="medicines8"><?php echo $medicine8; ?></p>
+                    <p class="medicines9"><?php echo $medicine9; ?></p>
+                    <p class="medicines10"><?php echo $medicine10; ?></p>
+                    <p class="medicines11"><?php echo $medicine11; ?></p>
+                    <p class="medicines12"><?php echo $medicine12; ?></p>
 
-  <?php
+                    <?php
   if ($row['scheduledMedical'] === 'Yes') {
     $displayText = '<p class="scheduledMedicalYes">✔</p>';
   } elseif ($row['scheduledMedical'] === 'No') {
@@ -886,7 +907,7 @@ echo $displayText;
   echo $displayText;
   ?>
 
-<?php
+                    <?php
   if ($row['scheduledMedical1'] === 'Yearly') {
     $displayText = '<p class="scheduledMedical1Yearly">✔</p>';
   } elseif ($row['scheduledMedical1'] === 'Every 6 months') {
@@ -895,30 +916,31 @@ echo $displayText;
   echo $displayText;
   ?>
 
-  <p class="scheduledMedical1Others"><?php echo $scheduledMedical1Others; ?></p>
+                    <p class="scheduledMedical1Others"><?php echo $scheduledMedical1Others; ?></p>
 
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
-  <button class="printbutton" id="printbutton">
-    <img src="images/printicon.png" class="printicon">
-    Print this page
-  </button>
+    <button class="printbutton" id="printbutton">
+        <img src="images/printicon.png" class="printicon">
+        Print this page
+    </button>
 
-<script>
+    <script>
     const printBtn = document.getElementById("printbutton");
 
-printBtn.addEventListener("click", function() {
-  print();
+    printBtn.addEventListener("click", function() {
+        print();
 
-})
+    })
 
-const barangayElement = document.querySelector(".barangay");
-const wordsCount = barangayElement.textContent.trim().split(" ").length;
-if (wordsCount > 25) {
-  barangayElement.classList.add("long");
-}
-</script>
+    const barangayElement = document.querySelector(".barangay");
+    const wordsCount = barangayElement.textContent.trim().split(" ").length;
+    if (wordsCount > 25) {
+        barangayElement.classList.add("long");
+    }
+    </script>
 </body>
+
 </html>

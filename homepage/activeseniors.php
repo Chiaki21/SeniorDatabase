@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
 $autoOutResult = mysqli_query($conx, $autoOutQuery);
@@ -32,11 +31,14 @@ $totalRecords = $row['total'];
 $totalPages = ceil($totalRecords / $recordsPerPage);
 $result = mysqli_query($conx, $sqlSelect);
 
+$maxPagesToShow = 5;
+$startPage = max(1, $currentpage - floor($maxPagesToShow / 2));
+$endPage = min($totalPages, $startPage + $maxPagesToShow - 1);
+$startPage = max(1, $endPage - $maxPagesToShow + 1);
 
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $registerResult = $conx->query($sql);
 
@@ -488,26 +490,28 @@ button.show-modal,
   </tbody>
 </table>
   </div>
-            
+
   <div class="pagination">
-  <?php if ($currentpage > 1) : ?>
-    <a href="?page=1">First</a>
-    <a href="?page=<?php echo ($currentpage - 1); ?>">Previous</a>
-  <?php endif; ?>
+    <?php if ($totalPages > 1): ?>
+        <?php if ($currentpage > 1): ?>
+            <a href="?page=1">First</a>
+            <a href="?page=<?php echo $currentpage - 1; ?>">Previous</a>
+        <?php endif; ?>
 
-  <?php for ($i = 1; $i <= $totalPages; $i++) : ?>
-    <?php if ($currentpage == $i) : ?>
-      <span class="current-page"><?php echo $i; ?></span>
-    <?php else : ?>
-      <a href="?page=<?php echo $i; ?>"><?php echo $i; ?></a>
+        <?php for ($i = $startPage; $i <= $endPage; $i++): ?>
+            <a href="?page=<?php echo $i; ?>" <?php echo ($i == $currentpage) ? 'class="current-page"' : ''; ?>><?php echo $i; ?></a>
+        <?php endfor; ?>
+
+        <?php if ($currentpage < $totalPages): ?>
+            <a href="?page=<?php echo $currentpage + 1; ?>">Next</a>
+            <a href="?page=<?php echo $totalPages; ?>">Last</a>
+        <?php endif; ?>
     <?php endif; ?>
-  <?php endfor; ?>
-
-  <?php if ($currentpage < $totalPages) : ?>
-    <a href="?page=<?php echo ($currentpage + 1); ?>">Next</a>
-    <a href="?page=<?php echo $totalPages; ?>">Last</a>
-  <?php endif; ?>
 </div>
+
+
+            
+  
 
 </div>
     </div>

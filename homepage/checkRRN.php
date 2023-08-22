@@ -10,7 +10,6 @@ if (isset($_POST['referenceCode'])) {
     $row = $result->fetch_assoc();
     $count = $row['count'];
 
-    // Return the result as JSON
     echo json_encode(['exists' => ($count > 0)]);
 } else {
     echo json_encode(['error' => 'Invalid request']);

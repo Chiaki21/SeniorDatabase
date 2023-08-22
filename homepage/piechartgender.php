@@ -1,9 +1,9 @@
 <?php
 include('../configuration/config.php');
-include("connect.php");
+
 
 $sql = "SELECT gender, COUNT(*) AS count FROM people WHERE gender IN ('Male', 'Female') GROUP BY gender";
-$result = $conn->query($sql);
+$result = $conx->query($sql);
 
 $labels = array();
 $data = array();
@@ -26,7 +26,7 @@ if ($result->num_rows > 0) {
     }
 }
 
-$conn->close();
+
 
 $labels_json = json_encode($labels);
 $data_json = json_encode($data);

@@ -5,7 +5,7 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
+
 
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
@@ -24,11 +24,8 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $result = $conx->query($sql);
-
-  mysqli_close($conx);
 }
 $recordsPerPage = 10;
 $currentpage = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -38,7 +35,7 @@ $selectedBarangay = isset($_GET['barangay']) ? $_GET['barangay'] : '';
 $sqlCount = "SELECT COUNT(*) as total FROM people WHERE barangay LIKE '%$selectedBarangay%'";
 $sqlSelect = "SELECT * FROM people WHERE barangay LIKE '%$selectedBarangay%' ORDER BY updated_date DESC LIMIT $offset, $recordsPerPage";
 
-$countResult = mysqli_query($conn, $sqlCount);
+$countResult = mysqli_query($conx, $sqlCount);
 $row = mysqli_fetch_assoc($countResult);
 $totalRecords = $row['total'];
 $totalPages = ceil($totalRecords / $recordsPerPage);
@@ -49,15 +46,24 @@ $startPage = max(1, $currentpage - floor($maxPagesToShow / 2));
 $endPage = min($totalPages, $startPage + $maxPagesToShow - 1);
 $startPage = max(1, $endPage - $maxPagesToShow + 1);
 
-$result = mysqli_query($conn, $sqlSelect);
+// Check if a gender filter is applied
+$genderFilter = '';
+if (isset($_GET['gender'])) {
+  $selectedGender = $_GET['gender'];
+  $genderFilter = " AND gender = '$selectedGender'";
+}
+
+// Modify the SQL query to apply gender filter
+$sqlCount .= $genderFilter;
+$sqlSelect .= $genderFilter;
+
+$result = mysqli_query($conx, $sqlSelect);
 
 // Get the count of users in the selected barangay
-$userCountQuery = "SELECT COUNT(*) AS userCount FROM people WHERE barangay LIKE '%$selectedBarangay%'";
-$userCountResult = mysqli_query($conn, $userCountQuery);
+$userCountQuery = "SELECT COUNT(*) AS userCount FROM people WHERE barangay LIKE '%$selectedBarangay%'$genderFilter";
+$userCountResult = mysqli_query($conx, $userCountQuery);
 $userCountRow = mysqli_fetch_assoc($userCountResult);
 $userCount = $userCountRow['userCount'];
-
-mysqli_close($conn);
 ?>
 
 <!DOCTYPE html>
@@ -424,7 +430,9 @@ mysqli_close($conn);
         <a href="homelog.php">
           <img src="../img/sslogo.png" alt="" class="logo-details">
         </a>
-        <span class="logo_name">Senior Solutions</span>
+        <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
       </div>
       <ul class="nav-links">
         <li>
@@ -565,55 +573,43 @@ mysqli_close($conn);
     </section>
 
     <script>
-      let sidebar = document.querySelector(".sidebar");
-      let sidebarBtn = document.querySelector(".sidebarBtn");
-      sidebarBtn.onclick = function() {
-        sidebar.classList.toggle("active");
-        if (sidebar.classList.contains("active")) {
-          sidebarBtn.classList.replace("bx-menu", "bx-menu-alt-right");
-        } else {
-          sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
-        }
-      };
+  let sidebar = document.querySelector(".sidebar");
+  let sidebarBtn = document.querySelector(".sidebarBtn");
+  sidebarBtn.onclick = function() {
+    sidebar.classList.toggle("active");
+    if (sidebar.classList.contains("active")) {
+      sidebarBtn.classList.replace("bx-menu", "bx-menu-alt-right");
+    } else {
+      sidebarBtn.classList.replace("bx-menu-alt-right", "bx-menu");
+    }
+  };
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const maleFilterButton = document.getElementById("maleFilter");
+    const femaleFilterButton = document.getElementById("femaleFilter");
+    const allFilterButton = document.getElementById("allFilter");
+    const countGenderElement = document.querySelector(".countGender");
+
+    maleFilterButton.addEventListener("click", function() {
+      redirectToGenderPage("Male");
+    });
+
+    femaleFilterButton.addEventListener("click", function() {
+      redirectToGenderPage("Female");
+    });
+
+    allFilterButton.addEventListener("click", function() {
+      location.reload();
+    });
+
+    function redirectToGenderPage(gender) {
+      const selectedBarangay = "<?php echo urlencode($selectedBarangay); ?>";
+      window.location.href = `barangay${gender.toLowerCase()}.php?gender=${gender}&barangay=${selectedBarangay}`;
+    }
+  });
+</script>
 
 
-
-      document.addEventListener("DOMContentLoaded", function() {
-        const maleFilterButton = document.getElementById("maleFilter");
-        const femaleFilterButton = document.getElementById("femaleFilter");
-        const allFilterButton = document.getElementById("allFilter");
-        const countGenderElement = document.querySelector(".countGender");
-
-        maleFilterButton.addEventListener("click", function() {
-          filterTableByGender("Male");
-        });
-
-        femaleFilterButton.addEventListener("click", function() {
-          filterTableByGender("Female");
-        });
-
-        allFilterButton.addEventListener("click", function() {
-          // Reload the page when the "All" button is clicked
-          location.reload();
-        });
-
-        function filterTableByGender(gender) {
-          const rows = document.querySelectorAll(".table tbody tr");
-          let count = 0;
-          rows.forEach((row) => {
-            const genderColumn = row.querySelector(".gender-column");
-            const personGender = genderColumn.textContent.trim();
-            if (personGender !== gender) {
-              row.style.display = "none";
-            } else {
-              row.style.display = "";
-              count++;
-            }
-          });
-          countGenderElement.textContent = `Count: ${count}`;
-        }
-      });
-    </script>
   <?php endif; ?>
 </body>
 

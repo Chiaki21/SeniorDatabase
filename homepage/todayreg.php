@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
 $autoOutResult = mysqli_query($conx, $autoOutQuery);
@@ -23,11 +22,10 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $result = $conx->query($sql);
 
-  mysqli_close($conx);
+
 }
 
 $recordsPerPage = 100000; // change for the limit of users per page
@@ -37,11 +35,11 @@ $searchQuery = '';
 $today = date("Y-m-d");
 $sqlCount = "SELECT COUNT(*) as total FROM people WHERE DATE(updated_date) = '$today'";
 $sqlSelect = "SELECT * FROM people WHERE DATE(updated_date) = '$today' ORDER BY updated_date DESC LIMIT $offset, $recordsPerPage";
-$countResult = mysqli_query($conn, $sqlCount);
+$countResult = mysqli_query($conx, $sqlCount);
 $row = mysqli_fetch_assoc($countResult);
 $totalRecords = $row['total'];
 $totalPages = ceil($totalRecords / $recordsPerPage);
-$result = mysqli_query($conn, $sqlSelect);
+$result = mysqli_query($conx, $sqlSelect);
 
 ?>
 
@@ -340,7 +338,9 @@ button.show-modal,
       <a href="homelog.php">
         <img src="../img/sslogo.png" alt="" class="logo-details">
       </a>
-      <span class="logo_name">Senior Solutions</span>
+      <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
     </div>
     <ul class="nav-links">
     <li>

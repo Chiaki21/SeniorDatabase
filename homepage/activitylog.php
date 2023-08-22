@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
 $autoOutResult = mysqli_query($conx, $autoOutQuery);
@@ -22,8 +21,6 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
 
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
-} else {
-  mysqli_close($conx);
 }
 ?>
 
@@ -325,7 +322,9 @@ if ($_SESSION['role'] === 'User') {
             <a href="homelog.php">
                 <img src="../img/sslogo.png" alt="" class="logo-details">
             </a>
-            <span class="logo_name">Senior Solutions</span>
+            <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
         </div>
         <ul class="nav-links">
             <li>
@@ -404,7 +403,7 @@ if ($_SESSION['role'] === 'User') {
                         <?php
   $currentDate = date('Y-m-d');
   $logQuery = "SELECT * FROM log WHERE DATE(date) = '{$currentDate}' ORDER BY date DESC";
-  $logResult = mysqli_query($conn, $logQuery);
+  $logResult = mysqli_query($conx, $logQuery);
   while ($row = mysqli_fetch_assoc($logResult)) {
     $logDate = date('m-d-y g:ia', strtotime($row['date']));
     $account = $row['account'];

@@ -34,7 +34,7 @@ if ($_SESSION['role'] === 'User') {
 } elseif ($_SESSION['role'] === 'Admin') {
   $error_msg = 'You are in "Admin" role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
+
 
   
 
@@ -52,7 +52,6 @@ $total_records_row = $total_records_result->fetch_assoc();
 $total_records = $total_records_row['total'];
 $total_pages = ceil($total_records / $records_per_page);
 
-  mysqli_close($conx);
 }
 ?>
 
@@ -381,6 +380,7 @@ $total_pages = ceil($total_records / $records_per_page);
   width: 100%;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.4);
+  
 }
 
 .modal-content {
@@ -467,7 +467,9 @@ $total_pages = ceil($total_records / $records_per_page);
             <a href="homelog.php">
                 <img src="../img/sslogo.png" alt="" class="logo-details">
             </a>
-            <span class="logo_name">Senior Solutions</span>
+            <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
         </div>
         <ul class="nav-links">
             <li>
@@ -676,13 +678,14 @@ if (isset($_GET['Verification'])) {
   const modal = document.getElementById("deleteModal");
   const deleteButton = modal.querySelector("button");
   const modalText = modal.querySelector("#modalText");
-  modalText.innerText = `Are you sure you want to delete ${username}?`;
+  modalText.innerHTML = `Are you sure you want to delete <strong>${username}</strong>?`;
   modal.style.display = "block";
   deleteButton.onclick = function () {
     deleteUserConfirmed(username);
     closeModal();
   };
 }
+
 
 
 function closeModal() {

@@ -430,6 +430,8 @@ footer {
   color: #333;
   margin-right: 5px;
 }
+
+
 /* Responsive Media Query */
 @media (max-width: 1240px) {
   .sidebar{

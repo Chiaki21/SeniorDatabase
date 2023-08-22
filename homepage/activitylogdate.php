@@ -5,7 +5,6 @@ if (!isset($_COOKIE['Email_Cookie']) || !isset($_SESSION['logged_in'])) {
   exit();
 }
 include('../configuration/config.php');
-include('connect.php');
 $email = $_COOKIE['Email_Cookie'];
 $autoOutQuery = "SELECT autoOut FROM register WHERE email='{$email}'";
 $autoOutResult = mysqli_query($conx, $autoOutQuery);
@@ -30,8 +29,7 @@ if (isset($_GET['selected_date'])) {
   $selectedDate = $_GET['selected_date'];
   $logQuery = "SELECT * FROM log WHERE DATE(date) = '{$selectedDate}' ORDER BY date DESC";
 }
-$logResult = mysqli_query($conn, $logQuery);
-  mysqli_close($conx);
+$logResult = mysqli_query($conx, $logQuery);
 }
 ?>
 
@@ -320,7 +318,9 @@ $logResult = mysqli_query($conn, $logQuery);
       <a href="homelog.php">
         <img src="../img/sslogo.png" alt="" class="logo-details">
       </a>
-      <span class="logo_name">Senior Solutions</span>
+      <a href="homelog.php">
+            <span class="logo_name" style="cursor: pointer;">Senior Solutions</span>
+    </a>
     </div>
     <ul class="nav-links">
       <li>
@@ -388,14 +388,13 @@ $logResult = mysqli_query($conn, $logQuery);
     <a href="activitylog.php" class="btn btn-clear" id="clearButton">Clear</a>
   </form>
   <?php
-  include('connect.php');
   if (isset($_GET['selected_date'])) {
     $selectedDate = $_GET['selected_date'];
     $logQuery = "SELECT * FROM log WHERE DATE(date) = '{$selectedDate}' ORDER BY date DESC";
   } else {
     $logQuery = "SELECT * FROM log ORDER BY date DESC";
   }
-  $logResult = mysqli_query($conn, $logQuery);
+  $logResult = mysqli_query($conx, $logQuery);
   // Check if there are any rows fetched
   if (mysqli_num_rows($logResult) > 0) {
     ?>

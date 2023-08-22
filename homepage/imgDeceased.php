@@ -26,16 +26,13 @@ if ($autoOut == 'Yes' || $forStatus1 == 'Disabled') {
 if ($_SESSION['role'] === 'User') {
   $error_msg = 'You are in "User" only role, contact your supervisor for assistance';
 } else {
-  include("connect.php");
   $sql = "SELECT * FROM register";
   $result = $conx->query($sql);
-
-  mysqli_close($conx);
 }
 $id = isset($_GET['id']) ? $_GET['id'] : null;
 if ($id) {
   $sql = "SELECT * FROM people WHERE id = $id";
-  $result = mysqli_query($conn, $sql);
+  $result = mysqli_query($conx, $sql);
   $row = mysqli_fetch_assoc($result);
   $imagePath = "{$row['deceasedCert']}";
 }

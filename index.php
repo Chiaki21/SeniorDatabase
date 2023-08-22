@@ -184,7 +184,6 @@ if (isset($_POST['submit'])) {
                 </form>
             </div>
         </div>
-
         <div class="panels-container">
             <div class="panel left-panel">
                 <div class="content">
@@ -221,7 +220,7 @@ if (isset($_POST['submit'])) {
 </body>
 
 <div class="logo-container">
-    <img src="img/sslogo.png" alt="Logo" class="logo" />
+    <img src="img/ss.png" alt="Logo" class="logo" />
 </div>
 
 </html>
