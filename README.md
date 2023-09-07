@@ -6,3 +6,5 @@ must run in mysql, database name is "senior"
 admin credentials to log in:
 
 ictgma@gmail.com ###ICTADMIN###
+
+go to systemImageView to view the system.
