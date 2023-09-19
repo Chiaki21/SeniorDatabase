@@ -1,4 +1,4 @@
-live: [Visit the SeniorSolutions website](https://seniorsolutions.000webhostapp.com)
+can't show the live demo because it has database :(
 
 # SeniorDatabase
 made with HTML,CSS,Javascript (inside the html), PHP and MySQL
